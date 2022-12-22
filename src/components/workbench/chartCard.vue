@@ -4,8 +4,8 @@
 			<div class="top-box">
 				<div class="meta-wrapper">
 					<div class="meta">
-						<span>总销售额</span>
-						<el-tooltip effect="dark" content="Right Center prompts info" placement="top">
+						<span>{{ title }}</span>
+						<el-tooltip :content="title" placement="top">
 							<template #default>
 								<el-icon class="meta-action">
 									<Warning />
@@ -14,17 +14,17 @@
 						</el-tooltip>
 					</div>
 					<div class="total">
-						<span>¥ 126,560</span>
+						<span>{{ total }}</span>
 					</div>
 				</div>
 			</div>
 			<div id="content-box">
-				<slot name="chart"></slot>
+				<slot name="content"></slot>
 			</div>
 			<div class="footer-box">
 				<div class="field">
-					<span class="label">日销售额</span>
-					<span class="number">￥12,423</span>
+					<span class="label">{{ subtitle }}</span>
+					<span class="number">{{ subtotal }}</span>
 				</div>
 			</div>
 		</div>
@@ -34,9 +34,29 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 // onMounted(() => {});
+interface Props {
+	// Array<any> = any[]
+	title: string;
+	total: string;
+	subtitle: string;
+	subtotal: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	title: () => 'title',
+	total: () => 'total',
+	subtitle: () => 'subtitle',
+	subtotal: () => 'subtotal',
+});
 </script>
 
 <style scoped>
+.chart-card {
+	--divider-color: #f0f0f0;
+}
+.dark .chart-card {
+	--divider-color: #3e4141;
+}
 .chart-card {
 	background: var(--nav-bg-color);
 	border-color: var(--nav-bg-color);
@@ -64,7 +84,7 @@ import { onMounted } from 'vue';
 	height: 22px;
 	line-height: 22px;
 	font-size: 14px;
-	color: rgba(0, 0, 0, 0.45);
+	color: var(--basic-text-color);
 }
 
 .meta-action {
@@ -79,7 +99,7 @@ import { onMounted } from 'vue';
 	margin-top: 4px;
 	margin-bottom: 0;
 	overflow: hidden;
-	color: rgba(0, 0, 0, 0.85);
+	color: var(--basic-text-color);
 	font-size: 30px;
 	line-height: 38px;
 	white-space: nowrap;
@@ -89,12 +109,13 @@ import { onMounted } from 'vue';
 
 #content-box {
 	height: 46px;
+	position: relative;
 }
 
 .footer-box {
 	margin-top: 8px;
 	padding-top: 9px;
-	border-top: 1px solid #f0f0f0;
+	border-top: 1px solid var(--divider-color);
 }
 
 .field {
@@ -102,6 +123,7 @@ import { onMounted } from 'vue';
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	color: var(--basic-text-color);
 }
 
 .field > span {

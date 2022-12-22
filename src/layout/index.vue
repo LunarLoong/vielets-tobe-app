@@ -20,15 +20,13 @@ const { collapse } = storeToRefs(staticStore);
 
 <style lang="scss" scoped>
 @media screen and (min-width: 960px) {
-	//中心
 	.layout-content {
-		padding-top: calc(25px);
-		padding-left: calc(var(--sidebar-width) + 20px);
-		padding-right: 20px;
-		transition: padding-left 0.6s;
+		padding-top: 0;
+		padding-left: calc(var(--sidebar-width));
+		transition: padding-left var(--translation-duration);
 	}
 	.content-stretched {
-		padding-left: calc(var(--sidebar-width-small) + 20px);
+		padding-left: var(--sidebar-width-collapsed);
 	}
 }
 </style>

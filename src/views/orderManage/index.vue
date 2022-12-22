@@ -1,9 +1,9 @@
-<template>this is order manage page.</template>
+<template>
+	<GeneralPage></GeneralPage>
+</template>
 
-<script>
-export default {
-	name: 'Index',
-};
+<script lang="ts" setup>
+import GeneralPage from '~/components/generalPage.vue';
 </script>
 
 <style scoped></style>

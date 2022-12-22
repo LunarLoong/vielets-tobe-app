@@ -1,14 +1,14 @@
 <template>
-	<aside class="layout-sidebar" :class="{ 'is-collapse': isCollapse }">
+	<aside class="layout-sidebar" :class="{ 'is-collapse': collapse }">
 		<div class="sidebar-wrapper">
-			<div class="logo-container" :class="{ 'sidebar-collapsed': isCollapse }">
+			<div class="logo-container">
 				<a>
-					<img src="src/assets/1.svg" />
-					<h1>MUSOUL</h1>
+					<img src="src/assets/logo.svg" />
+					<h1>Vielets Pro</h1>
 				</a>
 			</div>
 			<div class="menu-container">
-				<el-menu router :default-active="activePath" class="menu" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
+				<el-menu router :default-active="activePath" class="menu" :collapse="collapse" @open="handleOpen" @close="handleClose">
 					<template v-for="item in menuList">
 						<el-sub-menu
 							v-if="item.children.length"
@@ -41,10 +41,10 @@
 					</template>
 				</el-menu>
 			</div>
-			<div class="sidebar-controller" @click="isCollapse = !isCollapse">
+			<div class="sidebar-controller" @click="collapse = !collapse">
 				<span class="controller-action">
 					<el-icon class="controller-icon">
-						<Expand v-if="isCollapse" />
+						<Expand v-if="collapse" />
 						<Fold v-else />
 					</el-icon>
 				</span>
@@ -58,12 +58,12 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { useStaticStore } from '~/store/modules/static';
 import { ElMessage } from 'element-plus';
 import { onBeforeRouteUpdate, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 const staticStore = useStaticStore();
-
-const isCollapse = ref(staticStore.collapse);
-watch(isCollapse, () => {
-	staticStore.collapse = isCollapse.value;
+const { collapse } = storeToRefs(staticStore);
+watch(collapse, () => {
+	staticStore.collapse = collapse.value;
 });
 
 const router = useRouter();
@@ -81,6 +81,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 };
 
 let menuList = reactive([]);
+
 async function getMenuList() {
 	await staticStore
 		.getMenuList()
@@ -102,19 +103,26 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @media screen and (min-width: 960px) {
-	//左侧
 	.layout-sidebar {
 		width: var(--sidebar-width);
 		position: fixed;
 		top: 0;
 		bottom: 0;
 		left: 0;
+		z-index: 100;
 		background-color: var(--nav-bg-color);
 		box-shadow: var(--nav-box-shadow);
 		transition: width var(--translation-duration) var(--el-transition-function-ease-in-out-bezier);
 	}
 	.is-collapse {
-		width: var(--sidebar-width-small);
+		width: var(--sidebar-width-collapsed);
+		.logo-container {
+			padding: 16px 8px;
+
+			h1 {
+				display: none;
+			}
+		}
 	}
 	.sidebar-wrapper {
 		display: flex;
@@ -129,18 +137,12 @@ onMounted(() => {
 		cursor: pointer;
 		transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
-	.logo-container.sidebar-collapsed {
-		padding: 16px 8px;
-	}
-	.logo-container.sidebar-collapsed h1 {
-		display: none;
-	}
 	.logo-container > a {
 		min-height: 32px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: #e6483e;
+		color: #2d93ff;
 		background-color: transparent;
 		cursor: pointer;
 		outline: none;
@@ -159,7 +161,6 @@ onMounted(() => {
 		margin: 0 0 0 12px;
 		font-weight: 600;
 		font-size: 18px;
-		letter-spacing: 0.125rem;
 		vertical-align: middle;
 		transition: display var(--translation-duration) ease-in-out;
 	}
@@ -168,7 +169,7 @@ onMounted(() => {
 		flex: 1 1 0;
 	}
 	.menu {
-		width: var(--sidebar-width-small);
+		width: var(--sidebar-width-collapsed);
 		min-height: 100%;
 		background: transparent;
 		border: none;
@@ -268,13 +269,5 @@ onMounted(() => {
 		color: var(--basic-text-color);
 		font-size: 1.25rem;
 	}
-	//.logo-container {
-	//	position: relative;
-	//	display: flex;
-	//	align-items: center;
-	//	padding: 16px;
-	//	cursor: pointer;
-	//	transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-	//}
 }
 </style>

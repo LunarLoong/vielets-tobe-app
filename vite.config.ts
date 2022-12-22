@@ -54,7 +54,7 @@ export default defineConfig({
 		preprocessorOptions: {
 			scss: {
 				// 两种方式都可以
-				additionalData: `@use "~/assets/styles/variable.scss" as *;`,
+				// additionalData: `@use "~/assets/styles/variable.scss" as *;`,
 			},
 		},
 	},

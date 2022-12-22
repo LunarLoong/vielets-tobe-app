@@ -27,6 +27,11 @@ const routes: any = [
 		],
 	},
 	{
+		path: '/member',
+		name: 'Member',
+		redirect: '/member/manage',
+	},
+	{
 		path: '/login',
 		name: 'Login',
 		component: () => import('~/views/login/index.vue'),
